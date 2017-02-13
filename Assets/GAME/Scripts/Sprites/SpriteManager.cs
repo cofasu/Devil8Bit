@@ -44,6 +44,6 @@ public class SpriteManager : MonoBehaviour
 			Debug.LogError("Pediste un ID que es nulo");
 		}	
 
-		return indexer[0];
+		return indexer[id];
 	}
 }

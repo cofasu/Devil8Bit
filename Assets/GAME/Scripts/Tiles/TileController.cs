@@ -12,6 +12,7 @@ public class TileController : MonoBehaviour {
 	private int spriteID;
 
 	void Start () {
+
 		if (view == null)
 		{
 			view = gameObject.GetComponent<TileView>();
@@ -40,6 +41,9 @@ public class TileController : MonoBehaviour {
 		gameObject.transform.localPosition = position;
 	}
 
-
-
+	public void SetViewByIndex(int ID)
+	{
+		Sprite s = SpriteManager.self.GetSprite(ID);
+		view.ChangeSprite(s);
+	}
 }

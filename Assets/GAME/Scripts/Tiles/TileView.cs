@@ -19,7 +19,7 @@ public class TileView : MonoBehaviour {
 	/// Hace un Resources.Load<Image> y setea el native size.
 	/// </summary>
 	/// <param name="path"></param>
-	public void ChangeImage(string path)
+	public void ChangeSprite(string path)
 	{
 		sprite = Resources.Load<Sprite>(path);
 		spriteRenderer.sprite = sprite;
