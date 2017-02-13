@@ -4,12 +4,11 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class BtnStart : MonoBehaviour
+public class ButtonStart : MonoBehaviour
 {
     Button myButton;
     private bool _Active = true;
-
-    private bool loadScene = false;
+    private bool _LoadScene = false;
 
     [SerializeField]
     private int scene;
@@ -27,23 +26,20 @@ public class BtnStart : MonoBehaviour
         if (_Active)
         {
             _Active = false;
-            loadScene = true;
+            _LoadScene = true;
             loadingText.text = "Loading...";
             
-            StartCoroutine(LoadNewScene());
-            
+            StartCoroutine(LoadNewScene());            
         }
     }
+
     void Update()
     {
-
-        if (loadScene)
+        if (_LoadScene)
         {
-            loadingText.color = new Color(loadingText.color.r, loadingText.color.g, loadingText.color.b, Mathf.PingPong(Time.time, 1));
-            
+            loadingText.color = new Color(loadingText.color.r, loadingText.color.g, loadingText.color.b, Mathf.PingPong(Time.time, 1));            
         }
     }
-
 
     IEnumerator LoadNewScene()
     {
@@ -53,7 +49,7 @@ public class BtnStart : MonoBehaviour
         while (!async.isDone)
         {
             yield return null;
-        }
+        }		
     }
 }
 
