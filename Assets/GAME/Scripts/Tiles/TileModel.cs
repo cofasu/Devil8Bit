@@ -16,6 +16,7 @@ public partial class TileModel  {
 		Destructable,
 		Occupied,
 		Buildable,
+		Droppable,
 		//Character
 		Walker,
 		Tower,
@@ -25,7 +26,7 @@ public partial class TileModel  {
 	}
 
 	[SerializeField]
-	private Kind kind;
+	public Kind kind;	
 
 	public TileModel(Kind kind, bool dragable)
 	{
@@ -48,4 +49,6 @@ public partial class TileModel  {
 	{
 		this.dragable = dragable;
 	}
+
+	public bool GetDragable { get { return dragable; } }
 }

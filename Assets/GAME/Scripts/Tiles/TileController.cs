@@ -2,16 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileController : MonoBehaviour {
+
+public class TileController : MonoBehaviour
+{
 
 	[SerializeField]
 	private Vector3 position;
 	[SerializeField]
-	private TileView view;
-	private TileModel definition;
+	public TileView view;
+	public TileModel definition;
 	private int spriteID;
+	private Transform parent;
 
-	void Start () {
+	public TileModel GetDefinition { get { return definition; } }
+	public TileView GetView { get { return view; } }
+
+	private DragAndDroppable dragAndDroppable;
+	private Vector2 mousePosition;
+	public static TileController itemBeingDragged;
+
+	public TileMap tilemap;
+
+	void Start()
+	{
 
 		if (view == null)
 		{
@@ -19,14 +32,16 @@ public class TileController : MonoBehaviour {
 			Debug.LogWarning("Te olvidaste de poner el TileView. Lo puse por vos");
 		}
 
+		parent = gameObject.GetComponentInParent<Transform>();
 		view.ChangeMaterial(gameObject.GetComponent<SpriteRenderer>().material);
 
-		SetDefaultTIle();
+		dragAndDroppable = gameObject.AddComponent<DragAndDroppable>();
+		dragAndDroppable.tileController = this;
 	}
 
 	public void SetDefaultTIle()
 	{
-		definition = new TileModel(TileModel.Kind.Background, false);
+		definition = new TileModel(TileModel.Kind.Background, true);
 	}
 
 	public virtual void MoveTo(Vector3 direction)
@@ -46,4 +61,17 @@ public class TileController : MonoBehaviour {
 		Sprite s = SpriteManager.self.GetSprite(ID);
 		view.ChangeSprite(s);
 	}
+
+	public void ShowGlow(bool show)
+	{
+		if (show)
+		{
+			view.spriteRenderer.color = Color.white;
+		}			
+		else
+		{
+			view.spriteRenderer.color = Color.red;
+		}			
+	}
+
 }
