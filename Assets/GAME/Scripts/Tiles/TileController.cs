@@ -25,7 +25,6 @@ public class TileController : MonoBehaviour
 
 	void Start()
 	{
-
 		if (view == null)
 		{
 			view = gameObject.GetComponent<TileView>();
@@ -63,15 +62,9 @@ public class TileController : MonoBehaviour
 	}
 
 	public void ShowGlow(bool show)
-	{
-		if (show)
-		{
-			view.spriteRenderer.color = Color.white;
-		}			
-		else
-		{
-			view.spriteRenderer.color = Color.red;
-		}			
+	{		
+		view.GetGlow().TurnGlow(show);
+		Debug.Log(show);
 	}
 
 }

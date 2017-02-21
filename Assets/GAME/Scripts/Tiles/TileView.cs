@@ -9,6 +9,8 @@ public class TileView : MonoBehaviour {
 	public Animator anim;	
 	private Material material;
 	private Sprite sprite;
+	private Glow glow;
+	private TileController tileController;
 
 	public void ChangeSprite(Sprite sprite)
 	{
@@ -38,5 +40,27 @@ public class TileView : MonoBehaviour {
 	{
 		this.material = Resources.Load<Material>(path);
 		spriteRenderer.material = material;
+	}
+
+	public void SetController(TileController tc)
+	{
+		tileController = tc;
+	}
+	
+	public void SetGlow(Glow glow)
+	{
+		if(this.glow != null)
+		{
+			Destroy(this.glow.gameObject);
+			this.glow = null;
+		}
+
+		this.glow = tileController.GetComponentInChildren<Glow>();
+		this.glow.transform.localPosition = Vector3.zero;
+	}
+
+	public Glow GetGlow()
+	{
+		return glow;
 	}
 }

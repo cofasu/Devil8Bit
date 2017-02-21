@@ -14,7 +14,7 @@ public class TileMap : MonoBehaviour {
 
 	public List<GameObject> allTiles;
 	public List<TileController> tilesControllers;
-	public GameObject[,] indexedTiles = new GameObject[width, height];
+	public GameObject[,] indexedTiles = new GameObject[width, height];	
 
 	void Start()
 	{
@@ -84,7 +84,9 @@ public class TileMap : MonoBehaviour {
 
 				tc.tilemap = this;
 				tc.SetDefaultTIle();
-				tc.SetViewByIndex(matrix[y,x]);				
+				tc.SetViewByIndex(matrix[y,x]);
+				tc.view.SetController(tc);
+				tc.view.SetGlow(tc.GetComponentInChildren<Glow>());
 			}
 		}
 
@@ -93,6 +95,8 @@ public class TileMap : MonoBehaviour {
 			int random = UnityEngine.Random.Range(0, tilesControllers.Count);
 			tilesControllers[random].definition.SetDefinition(TileModel.Kind.Droppable, false);			
 		}
+
+		ShowDroppable(false);
 	}
 
 	public void Instantiate(string [,] matrix)
@@ -123,7 +127,6 @@ public class TileMap : MonoBehaviour {
 				tiles.Add(tc);
 		}
 
-		Debug.Log(tiles.Count);
 		return tiles;
 	}
 }
