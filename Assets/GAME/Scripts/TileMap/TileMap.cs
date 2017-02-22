@@ -14,7 +14,7 @@ public class TileMap : MonoBehaviour {
 
 	public List<GameObject> allTiles;
 	public List<TileController> tilesControllers;
-	public GameObject[,] indexedTiles = new GameObject[width, height];	
+	public TileController[,] indexedTiles = new TileController[height, width];	
 
 	void Start()
 	{
@@ -78,7 +78,7 @@ public class TileMap : MonoBehaviour {
 
 				allTiles.Add(t);
 				tilesControllers.Add(tc);
-				indexedTiles[x, y] = t;
+				indexedTiles[y, x] = tc;
 
 				t.transform.localPosition = new Vector3(x, y, 0);
 
@@ -96,7 +96,71 @@ public class TileMap : MonoBehaviour {
 			tilesControllers[random].definition.SetDefinition(TileModel.Kind.Droppable, false);			
 		}
 
+		GenerateConnections(indexedTiles);
+
 		ShowDroppable(false);
+
+		AStar astar = new AStar();
+		List<AStar.Node> lista = astar.Resolve(tilesControllers[0], tilesControllers[25], false);
+		Debug.Log("FoundPath from: " + tilesControllers[0] + " to: " + tilesControllers[25]);
+		for (int i = 0; i < lista.Count; i++)
+		{
+			if (i == lista.Count-1)
+				continue;
+			Debug.Log(lista[i].tile);
+		}		
+	}
+
+	public void GenerateConnections(TileController[,] matrix)
+	{
+		int leftConecction, topConnection, rightConnection, bottomConnection = 0;
+
+		for (int w = 0; w < width; w++)
+		{
+			for (int h = 0; h < height; h++)
+			{
+				leftConecction = w;
+				leftConecction--;
+				topConnection = h;
+				topConnection++;
+				rightConnection = w;
+				rightConnection++;
+				bottomConnection = h;
+				bottomConnection--;
+
+				if (leftConecction >= 0)
+				{
+					Connection c = new Connection();
+					c.tileA = matrix[h, w];
+					c.tileB = matrix[h, leftConecction];
+					matrix[h, w].connections.Add(c);
+				}
+
+				if (rightConnection < width)
+				{
+					Connection c = new Connection();
+					c.tileA = matrix[h, w];
+					c.tileB = matrix[h, rightConnection];
+					matrix[h, w].connections.Add(c);
+				}
+
+				if (bottomConnection >= 0)
+				{
+					Connection c = new Connection();
+					c.tileA = matrix[h, w];
+					c.tileB = matrix[bottomConnection, w];
+					matrix[h, w].connections.Add(c);
+				}
+
+				if (topConnection < height)
+				{
+					Connection c = new Connection();
+					c.tileA = matrix[h, w];
+					c.tileB = matrix[topConnection, w];
+					matrix[h, w].connections.Add(c);
+				}
+			}
+		}
 	}
 
 	public void Instantiate(string [,] matrix)

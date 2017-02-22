@@ -5,9 +5,8 @@ using UnityEngine;
 
 public class TileController : MonoBehaviour
 {
-
 	[SerializeField]
-	private Vector3 position;
+	public Vector3 position;
 	[SerializeField]
 	public TileView view;
 	public TileModel definition;
@@ -22,6 +21,7 @@ public class TileController : MonoBehaviour
 	public static TileController itemBeingDragged;
 
 	public TileMap tilemap;
+	public List<Connection> connections = new List<Connection>();
 
 	void Start()
 	{
@@ -64,7 +64,5 @@ public class TileController : MonoBehaviour
 	public void ShowGlow(bool show)
 	{		
 		view.GetGlow().TurnGlow(show);
-		Debug.Log(show);
 	}
-
 }
