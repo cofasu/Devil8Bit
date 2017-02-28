@@ -18,7 +18,6 @@ public class Glow : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-
 		alphaOne = alphaZero = Color.white;
 		alphaZero.a = 0;
 		TurnGlow(isGlowOn);
@@ -26,6 +25,7 @@ public class Glow : MonoBehaviour
 
 	public void TurnGlow(bool on)
 	{
+	
 		isGlowOn = on;
 
 		if (on)

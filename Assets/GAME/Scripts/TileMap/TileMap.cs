@@ -87,14 +87,17 @@ public class TileMap : MonoBehaviour {
 				tc.SetViewByIndex(matrix[y,x]);
 				tc.view.SetController(tc);
 				tc.view.SetGlow(tc.GetComponentInChildren<Glow>());
+				tc.SetCharacterAnimationController(false);
+				tc.SetCharBasicController(false);
 			}
 		}
 
 		for (int i = 0; i < 5; i++)
 		{
 			int random = UnityEngine.Random.Range(0, tilesControllers.Count);
-			tilesControllers[random].definition.SetDefinition(TileModel.Kind.Droppable, false);			
-		}
+			tilesControllers[random].GetDefinition.SetDefinition(TileModel.Kind.Droppable, false);
+			tilesControllers[random].AddCheckpointFighter();
+		}	
 
 		GenerateConnections(indexedTiles);
 

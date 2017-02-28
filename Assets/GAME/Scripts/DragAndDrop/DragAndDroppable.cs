@@ -11,6 +11,8 @@ public class DragAndDroppable : MonoBehaviour
 		UpdateDrag();
 	}
 
+	public TileModel.Kind droppableKind;
+
 	Vector2 mousePosition;
 	Vector3 originalPosition;
 	public TileController tileController;
@@ -66,6 +68,9 @@ public class DragAndDroppable : MonoBehaviour
 						if (Vector3.Distance(droppables[i].transform.position, lastClosest.transform.position) < Vector3.Distance(tileController.transform.position, droppables[i].transform.position))
 							continue;
 
+						if (tileController.GetDefinition.kind != droppableKind)
+							continue;
+
 						lastClosest = droppables[i];
 						Debug.Log("Replaced lastClosest");
 					}
@@ -81,6 +86,7 @@ public class DragAndDroppable : MonoBehaviour
 					Debug.Log("DroppedOn:" + lastClosest.transform.position + lastClosest.name);
 					tileController.GetView.spriteRenderer.color = Color.green;
 					tileController.definition.SetDraggable(false);
+					lastClosest.OnEnter(tileController);										
 				}					
 				else
 					this.transform.position = originalPosition;

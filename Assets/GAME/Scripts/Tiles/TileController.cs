@@ -16,12 +16,16 @@ public class TileController : MonoBehaviour
 	public TileModel GetDefinition { get { return definition; } }
 	public TileView GetView { get { return view; } }
 
-	private DragAndDroppable dragAndDroppable;
+	public DragAndDroppable dragAndDroppable;
 	private Vector2 mousePosition;
 	public static TileController itemBeingDragged;
 
 	public TileMap tilemap;
 	public List<Connection> connections = new List<Connection>();
+	public List<Checkpoint> checkpoints = new List<Checkpoint>();
+
+	public CharBasicController charBasicController;
+	public CharAnimationController charAnimationController;
 
 	void Start()
 	{
@@ -64,5 +68,13 @@ public class TileController : MonoBehaviour
 	public void ShowGlow(bool show)
 	{		
 		view.GetGlow().TurnGlow(show);
+	}
+
+	public void OnEnter(TileController tc)
+	{
+		for (int i = 0; i < checkpoints.Count; i++)
+		{
+			checkpoints[i].OnEnter(tc);
+		}
 	}
 }
