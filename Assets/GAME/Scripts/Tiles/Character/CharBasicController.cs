@@ -94,48 +94,43 @@ public class CharBasicController : MonoBehaviour
 
 			if (distance < 0.001f)
 			{
-
 				yield return new WaitForSeconds(_Delay);
 				_ReadyToNextPos = true;
 				yield break;
 			}
-
 			yield return null;
 		}
-
 	}
+
 	protected void UpdateMovementByAxis(float fAxisX, float fAxisY)
 	{
-
-		if (isMoving)
-		{
-			var move = new Vector3(fAxisX, fAxisY, 0);
-
-			transform.position += move * _MovSpeed * Time.deltaTime;
-
+		if (fAxisX == 0 && fAxisY == 0)
+			m_animCtrl.IsAnimated = false;
+		else
 			m_animCtrl.IsAnimated = true;
 
-			if (Mathf.Abs(fAxisX) > Mathf.Abs(fAxisY))
-			{
-				if (fAxisX > 0)
-					m_animCtrl.CurrentDir = CharAnimationController.eDir.RIGHT;
-				else if (fAxisX < 0)
-					m_animCtrl.CurrentDir = CharAnimationController.eDir.LEFT;
-			}
-			else
-			{
-				if (fAxisY > 0)
-					m_animCtrl.CurrentDir = CharAnimationController.eDir.UP;
-				else if (fAxisY < 0)
-					m_animCtrl.CurrentDir = CharAnimationController.eDir.DOWN;
-			}
+		var move = new Vector3(fAxisX, fAxisY, 0);
 
+		transform.position += move * _MovSpeed * Time.deltaTime;
+
+		m_animCtrl.IsAnimated = true;
+
+		if (Mathf.Abs(fAxisX) > Mathf.Abs(fAxisY))
+		{
+			if (fAxisX > 0)
+				m_animCtrl.CurrentDir = CharAnimationController.eDir.RIGHT;
+			else if (fAxisX < 0)
+				m_animCtrl.CurrentDir = CharAnimationController.eDir.LEFT;
 		}
 		else
 		{
-			m_animCtrl.IsAnimated = false;
+			if (fAxisY > 0)
+				m_animCtrl.CurrentDir = CharAnimationController.eDir.UP;
+			else if (fAxisY < 0)
+				m_animCtrl.CurrentDir = CharAnimationController.eDir.DOWN;
 		}
 	}
+
 	public virtual void SetVisible(bool value)
 	{
 		m_animCtrl.TargetSpriteRenderer.enabled = value;

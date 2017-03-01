@@ -13,6 +13,7 @@ public class TileMap : MonoBehaviour
 	public Transform parent;
 	public Transform background;
 	public Transform characters;
+	public Transform road;
 	public GameObject tile;
 
 	public List<TileController> backgroundTileControllers = new List<TileController>();
@@ -62,14 +63,15 @@ public class TileMap : MonoBehaviour
 		gameObject.transform.localPosition = position;
 	}
 
-	public void ChangeParent(Transform newParent)
-	{
-		parent = newParent;
-		gameObject.transform.SetParent(newParent.transform);
-	}
+	//public void ChangeParent(Transform newParent)
+	//{
+	//	parent = newParent;
+	//	gameObject.transform.SetParent(newParent.transform);
+	//}
 
 	public void StartTileMap(int[,] matrix)
 	{
+		//Spawn Background
 		for (int x = 0; x < width; x++)
 		{
 			for (int y = 0; y < height; y++)
@@ -97,21 +99,19 @@ public class TileMap : MonoBehaviour
 			}
 		}
 
+		//Spawn Roads
+		for (int i = 0; i < 10; i++)
+		{
+			//Getmatrix
+			//Spawn like background
+		}
+
+		//Spawn Characters
 		int allyI = 22;
 		for (int i = 0; i < 10; i++)
 		{
 			var t = GameObject.Instantiate(tile, characters, false);
-			TileController tc = t.GetComponent<TileController>();			
-			if(i < 5)
-			{
-				t.name = "Enemy:" + tc.transform.localPosition.x + "," + tc.transform.localPosition.y;
-				enemyCharacterTileControllers.Add(tc);
-			}
-			else
-			{
-				t.name = "Ally:" + tc.transform.localPosition.x + "," + tc.transform.localPosition.y;
-				allyCharacterTileControllers.Add(tc);
-			}
+			TileController tc = t.GetComponent<TileController>();		
 
 			if(i<5)
 				t.transform.localPosition = new Vector3(i, 0, 0);
@@ -119,6 +119,18 @@ public class TileMap : MonoBehaviour
 				t.transform.localPosition = new Vector3(i-5, allyI, 0);
 
 			tc.position = t.transform.localPosition;
+
+			if (i < 5)
+			{
+				t.name = "Enemy:" + tc.position.x + "," + tc.position.y;
+				enemyCharacterTileControllers.Add(tc);
+			}
+			else
+			{
+				t.name = "Ally:" + tc.position.x + "," + tc.position.y;
+				allyCharacterTileControllers.Add(tc);
+			}
+
 
 			tc.SetDefaultTIle();
 			tc.GetDefinition.SetDefinition(TileModel.Kind.Walker, false);
@@ -287,7 +299,7 @@ public class TileMap : MonoBehaviour
 			}
 		}
 
-		Debug.Log("LastClosest returned: " + lastClosest.position + " To: " + current.position);
+		//Debug.Log("LastClosest returned: " + lastClosest.position + " To: " + current.position);
 		return lastClosest;
 	}
 
