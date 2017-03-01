@@ -44,12 +44,6 @@ public class CharBasicController : MonoBehaviour
 	protected void Start()
 	{
 		m_animCtrl = GetComponent<CharAnimationController>();
-
-		AddCharPosition = new Vector3(3, 3, 0);
-		AddCharPosition = new Vector3(4, 3, 0);
-		AddCharPosition = new Vector3(5, 4, 0);
-		AddCharPosition = new Vector3(2, 4, 0);
-		AddCharPosition = new Vector3(3, 4, 0);
 	}
 
 	protected void Update()
@@ -81,6 +75,20 @@ public class CharBasicController : MonoBehaviour
 		{
 			float step = _MovSpeed * Time.deltaTime;
 			transform.position = Vector3.MoveTowards(transform.position, _Target, step);
+
+			float checkDirX = transform.position.x - _Target.x;
+			float checkDirY = transform.position.y - _Target.y;
+
+			if (Mathf.Abs(checkDirX) > Mathf.Abs(checkDirY))
+			{
+				if (checkDirX < 0) m_animCtrl.CurrentDir = CharAnimationController.eDir.RIGHT;
+				else m_animCtrl.CurrentDir = CharAnimationController.eDir.LEFT;
+			}
+			else
+			{
+				if (checkDirY < 0) m_animCtrl.CurrentDir = CharAnimationController.eDir.UP;
+				else m_animCtrl.CurrentDir = CharAnimationController.eDir.DOWN;
+			}
 
 			float distance = (_Target - transform.position).magnitude;
 

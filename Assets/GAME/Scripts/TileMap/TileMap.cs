@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileMap : MonoBehaviour {
+public class TileMap : MonoBehaviour
+{
 
 	public int ID;
 	[SerializeField]
@@ -10,37 +11,41 @@ public class TileMap : MonoBehaviour {
 	public const int height = 23;
 	public Vector3 position;
 	public Transform parent;
+	public Transform background;
+	public Transform characters;
 	public GameObject tile;
 
-	public List<GameObject> allTiles;
-	public List<TileController> tilesControllers;
-	public TileController[,] indexedTiles = new TileController[height, width];	
+	public List<TileController> backgroundTileControllers = new List<TileController>();
+	public TileController[,] backgroundIndexedTiles = new TileController[height, width];
+
+	public List<TileController> allyCharacterTileControllers = new List<TileController>();
+	public List<TileController> enemyCharacterTileControllers = new List<TileController>();
 
 	void Start()
 	{
-		int[,] matrix = new int[height, width] {    { 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1},
-													{ 0, 1, 2, 3, 0, 1, 2, 3, 0, 1 ,1}};
+		int[,] matrix = new int[height, width] {    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
+													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0}};
 
 		StartTileMap(matrix);
 	}
@@ -62,56 +67,102 @@ public class TileMap : MonoBehaviour {
 		parent = newParent;
 		gameObject.transform.SetParent(newParent.transform);
 	}
-	
+
 	public void StartTileMap(int[,] matrix)
 	{
-		allTiles = new List<GameObject>();
-		tilesControllers = new List<TileController>();
-		
 		for (int x = 0; x < width; x++)
 		{
 			for (int y = 0; y < height; y++)
 			{
-				var t = GameObject.Instantiate(tile, parent, false);
-				TileController tc = t.GetComponent<TileController>();
+				var t = GameObject.Instantiate(tile, background, false);
 				t.name = x + "," + y;
 
-				allTiles.Add(t);
-				tilesControllers.Add(tc);
-				indexedTiles[y, x] = tc;
+				TileController tc = t.GetComponent<TileController>();
+
+				backgroundTileControllers.Add(tc);
+				backgroundIndexedTiles[y, x] = tc;
 
 				t.transform.localPosition = new Vector3(x, y, 0);
 
+				tc.position = t.transform.localPosition;
+
 				tc.tilemap = this;
 				tc.SetDefaultTIle();
-				tc.SetViewByIndex(matrix[y,x]);
+				tc.SetViewByIndex(matrix[y, x]);
 				tc.view.SetController(tc);
 				tc.view.SetGlow(tc.GetComponentInChildren<Glow>());
-				tc.SetCharacterAnimationController(false);
-				tc.SetCharBasicController(false);
+				tc.view.spriteRenderer.sortingOrder = 0;
+				//tc.SetCharacterAnimationController(false);
+				//tc.SetCharBasicController(false);
 			}
 		}
 
-		for (int i = 0; i < 5; i++)
+		int allyI = 22;
+		for (int i = 0; i < 10; i++)
 		{
-			int random = UnityEngine.Random.Range(0, tilesControllers.Count);
-			tilesControllers[random].GetDefinition.SetDefinition(TileModel.Kind.Droppable, false);
-			tilesControllers[random].AddCheckpointFighter();
-		}	
+			var t = GameObject.Instantiate(tile, characters, false);
+			TileController tc = t.GetComponent<TileController>();			
+			if(i < 5)
+			{
+				t.name = "Enemy:" + tc.transform.localPosition.x + "," + tc.transform.localPosition.y;
+				enemyCharacterTileControllers.Add(tc);
+			}
+			else
+			{
+				t.name = "Ally:" + tc.transform.localPosition.x + "," + tc.transform.localPosition.y;
+				allyCharacterTileControllers.Add(tc);
+			}
 
-		GenerateConnections(indexedTiles);
+			if(i<5)
+				t.transform.localPosition = new Vector3(i, 0, 0);
+			else
+				t.transform.localPosition = new Vector3(i-5, allyI, 0);
+
+			tc.position = t.transform.localPosition;
+
+			tc.SetDefaultTIle();
+			tc.GetDefinition.SetDefinition(TileModel.Kind.Walker, false);
+			tc.SetCharacterAnimationController(true);
+			tc.SetCharBasicController(false, false, true);
+			tc.view.spriteRenderer.sortingOrder = 1;
+		}
+		GenerateConnections(backgroundIndexedTiles);
 
 		ShowDroppable(false);
 
-		AStar astar = new AStar();
-		List<AStar.Node> lista = astar.Resolve(tilesControllers[0], tilesControllers[25], false);
-		Debug.Log("FoundPath from: " + tilesControllers[0] + " to: " + tilesControllers[25]);
-		for (int i = 0; i < lista.Count; i++)
+		//AStar astar = new AStar();
+		//List<AStar.Node> lista = astar.Resolve(backgroundTileControllers[0], backgroundTileControllers[25], false);
+		//Debug.Log("FoundPath from: " + backgroundTileControllers[0] + " to: " + backgroundTileControllers[25]);
+		//for (int i = 0; i < lista.Count; i++)
+		//{
+		//	if (i == lista.Count - 1)
+		//		continue;
+		//	Debug.Log(lista[i].tile);
+		//}
+
+		for (int i = 0; i < 5; i++)
 		{
-			if (i == lista.Count-1)
-				continue;
-			Debug.Log(lista[i].tile);
-		}		
+			TileController tc = allyCharacterTileControllers[i];
+			TileController closestEnemy = GetClosestEnemy(tc);
+			AStar a = new AStar();
+			List<AStar.Node> path = a.Resolve(	backgroundIndexedTiles[(int)tc.position.y,
+												(int)tc.position.x], backgroundIndexedTiles[(int)closestEnemy.position.y, 
+												(int)closestEnemy.position.x], false);
+			if(path != null)
+			{
+				for (int k = path.Count-1; k > 0; k--)
+				{
+					if (k == path.Count - 1)
+						continue;
+					tc.charBasicController.AddCharPosition = path[k].tile.transform.localPosition;
+					//Debug.Log("Added to: " + tc + " position: " + path[k].tile.transform.localPosition);
+				}
+			}
+			else
+			{
+				Debug.Log("Path NUll");
+			}
+		}
 	}
 
 	public void GenerateConnections(TileController[,] matrix)
@@ -166,17 +217,12 @@ public class TileMap : MonoBehaviour {
 		}
 	}
 
-	public void Instantiate(string [,] matrix)
-	{
-
-	}
-
 	public void ShowDroppable(bool show)
 	{
 		List<TileController> droppables = GetDroppables();
 		for (int i = 0; i < droppables.Count; i++)
 		{
-			if(droppables[i].definition.kind == TileModel.Kind.Droppable)
+			if (droppables[i].definition.kind == TileModel.Kind.Droppable)
 			{
 				droppables[i].ShowGlow(show);
 			}
@@ -187,13 +233,63 @@ public class TileMap : MonoBehaviour {
 	{
 		List<TileController> tiles = new List<TileController>();
 
-		for (int i = 0; i < tilesControllers.Count; i++)
+		for (int i = 0; i < backgroundTileControllers.Count; i++)
 		{
-			TileController tc = tilesControllers[i];
+			TileController tc = backgroundTileControllers[i];
 			if (tc.definition.kind == TileModel.Kind.Droppable)
 				tiles.Add(tc);
 		}
 
 		return tiles;
 	}
+
+	public List<TileController> FilterByDistance(List<TileController> toFilter, TileController with, float distance)
+	{
+		for (int i = 0; i < toFilter.Count; i++)
+		{
+			if (Vector3.Distance(with.transform.position, toFilter[i].transform.position) > distance)
+			{
+				toFilter.RemoveAt(i);
+				i--;
+			}
+		}
+
+		return toFilter;
+	}
+
+	float kDistance = 1;
+	TileController lastClosest = null;
+	public TileController GetClosestEnemy(TileController current)
+	{
+		lastClosest = null;
+		List<TileController> enemyList;
+		if(allyCharacterTileControllers.Contains(current))
+		{
+			enemyList = enemyCharacterTileControllers;
+		}
+		else
+		{
+			enemyList = allyCharacterTileControllers;
+		}
+		
+		for (int i = 0; i < enemyList.Count; i++)
+		{
+			if (lastClosest != null)
+			{
+				if (Vector3.Distance(current.transform.localPosition, lastClosest.transform.localPosition) < Vector3.Distance(current.transform.localPosition, enemyList[i].transform.localPosition))
+					continue;
+
+				lastClosest = enemyList[i];
+			}
+			else
+			{
+				lastClosest = enemyList[i];
+			}
+		}
+
+		Debug.Log("LastClosest returned: " + lastClosest.position + " To: " + current.position);
+		return lastClosest;
+	}
+
+
 }

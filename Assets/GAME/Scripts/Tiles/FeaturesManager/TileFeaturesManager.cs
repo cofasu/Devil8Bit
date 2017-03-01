@@ -25,11 +25,14 @@ public static class TileFeaturesManager  {
 		tc.charAnimationController = charAnim;
 	}
 
-	public static void SetCharBasicController(this TileController tc, bool isMoving = false)
+	public static void SetCharBasicController(this TileController tc, bool isMoving = false, bool axisInput = false, bool aStarMove = true)
 	{
 		tc.charBasicController = tc.gameObject.AddComponent<CharBasicController>();
 		tc.charBasicController.isMoving = isMoving;
-		tc.charBasicController.tileController = tc;		
+		tc.charBasicController.tileController = tc;
+
+		tc.charBasicController._axisInputMov = axisInput;
+		tc.charBasicController._AestrellaMov = aStarMove;
 	}
 
 	public static void AddCheckpointFighter(this TileController tc)

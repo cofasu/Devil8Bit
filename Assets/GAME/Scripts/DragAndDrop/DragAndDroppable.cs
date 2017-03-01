@@ -58,25 +58,25 @@ public class DragAndDroppable : MonoBehaviour
 				var droppables = tileController.tilemap.GetDroppables();
 				TileController lastClosest = null;
 				float kDistance = 1;
-				for (int i = 0; i < droppables.Count; i++)
-				{
-					if (Vector3.Distance(tileController.transform.position, droppables[i].transform.position) > kDistance)
-						continue;
-					
+
+				var filteredDroppable = tileController.tilemap.FilterByDistance(droppables, tileController, kDistance);
+
+				for (int i = 0; i < filteredDroppable.Count; i++)
+				{					
 					if (lastClosest != null)
 					{
-						if (Vector3.Distance(droppables[i].transform.position, lastClosest.transform.position) < Vector3.Distance(tileController.transform.position, droppables[i].transform.position))
+						if (Vector3.Distance(filteredDroppable[i].transform.position, lastClosest.transform.position) < Vector3.Distance(tileController.transform.position, droppables[i].transform.position))
 							continue;
 
 						if (tileController.GetDefinition.kind != droppableKind)
 							continue;
 
-						lastClosest = droppables[i];
+						lastClosest = filteredDroppable[i];
 						Debug.Log("Replaced lastClosest");
 					}
 					else
 					{
-						lastClosest = droppables[i];
+						lastClosest = filteredDroppable[i];
 					}
 				}
 

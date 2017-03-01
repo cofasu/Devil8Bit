@@ -21,6 +21,7 @@ public class TileController : MonoBehaviour
 	public static TileController itemBeingDragged;
 
 	public TileMap tilemap;
+	[SerializeField]
 	public List<Connection> connections = new List<Connection>();
 	public List<Checkpoint> checkpoints = new List<Checkpoint>();
 
@@ -37,9 +38,6 @@ public class TileController : MonoBehaviour
 
 		parent = gameObject.GetComponentInParent<Transform>();
 		view.ChangeMaterial(gameObject.GetComponent<SpriteRenderer>().material);
-
-		dragAndDroppable = gameObject.AddComponent<DragAndDroppable>();
-		dragAndDroppable.tileController = this;
 	}
 
 	public void SetDefaultTIle()

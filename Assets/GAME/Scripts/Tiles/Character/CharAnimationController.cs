@@ -47,7 +47,6 @@ public class CharAnimationController : MonoBehaviour
 	public void LoadSpriteCharSet(string path)
 	{
 		SpriteCharSet = Resources.Load<Sprite>(path);
-		Debug.Log("Load Sprite Char Set" + SpriteCharSet + "Path: " + path);
 	}
 
 	[SerializeField]

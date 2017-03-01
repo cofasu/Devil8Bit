@@ -28,7 +28,13 @@ public class AStar {
 
 public List<Node> Resolve(TileController tileStart, TileController tileGoal, bool ignoreEnd) {
 		if (tileStart == null || tileGoal == null) return null;
-		if (tileStart == tileGoal) return null;
+		if (tileStart == tileGoal)
+		{
+			Debug.Log(tileStart + "=" + tileGoal);
+			return null;
+		}
+
+
 
 		//if ((blockKind & BlockKind.Tower) == BlockKind.Tower)
 		//	if (siteGoal.isTower) return null;
@@ -61,6 +67,7 @@ public List<Node> Resolve(TileController tileStart, TileController tileGoal, boo
 
 			for (int i = 0; i < current.tile.connections.Count; i++)
 			{
+				//Debug.Log("Connections from: " + current.tile + ": TileA " + current.tile.connections[i].tileA + ": TileB " + current.tile.connections[i].tileB);
 				Connection neighborConnection = current.tile.connections[i];
 				TileController neighbourSite = neighborConnection.GetOpposedSite(current.tile);
 
