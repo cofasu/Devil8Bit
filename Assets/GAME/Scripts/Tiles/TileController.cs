@@ -8,7 +8,7 @@ public class TileController : MonoBehaviour
 	[SerializeField]
 	public Vector3 position;
 	[SerializeField]
-	public TileView view;
+	private TileView view;
 	public TileModel definition;
 	private int spriteID;
 	private Transform parent;
@@ -20,7 +20,7 @@ public class TileController : MonoBehaviour
 	private Vector2 mousePosition;
 	public static TileController itemBeingDragged;
 
-	public TileMap tilemap;
+	public TileMapController tilemap;
 	[SerializeField]
 	public List<Connection> connections = new List<Connection>();
 	public List<Checkpoint> checkpoints = new List<Checkpoint>();

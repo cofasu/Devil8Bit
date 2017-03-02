@@ -181,7 +181,7 @@ public class CharAnimationController : MonoBehaviour
 				{
 					try
 					{
-						Sprite sprFrame = Sprite.Create(SpriteCharSet.texture, rFrame, Pivot[frameNb / animFrames], 32f);
+						Sprite sprFrame = Sprite.Create(SpriteCharSet.texture, rFrame, Pivot[frameNb / animFrames], 40f);
 						sprFrame.name = SpriteCharSet.name + "_" + frameNb;
 						if (frameNb % animFrames == 0)
 							m_spriteXpIdleFrames.Add(sprFrame);

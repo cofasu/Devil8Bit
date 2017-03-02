@@ -134,6 +134,7 @@ public List<Node> Resolve(TileController tileStart, TileController tileGoal, boo
 			path.Add(startFrom);
 			startFrom = startFrom.parent;
 		} while (startFrom != null);
+
 		return path;
 	}
 	

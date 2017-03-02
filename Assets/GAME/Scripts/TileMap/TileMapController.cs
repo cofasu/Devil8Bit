@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
-public class TileMap : MonoBehaviour
+public class TileMapController : MonoBehaviour
 {
-
 	public int ID;
 	[SerializeField]
 	public const int width = 11;
@@ -17,38 +17,19 @@ public class TileMap : MonoBehaviour
 	public GameObject tile;
 
 	public List<TileController> backgroundTileControllers = new List<TileController>();
-	public TileController[,] backgroundIndexedTiles = new TileController[height, width];
+	public TileController[,] backgroundIndexedTiles = new TileController[width, height];
+
+	public List<TileController> roadTileControllers = new List<TileController>();
+	public TileController[,] roadIndexedTiles = new TileController[width, height];
 
 	public List<TileController> allyCharacterTileControllers = new List<TileController>();
 	public List<TileController> enemyCharacterTileControllers = new List<TileController>();
 
+	string path;
+	string jsonString;
+
 	void Start()
 	{
-		int[,] matrix = new int[height, width] {    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0},
-													{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0}};
-
-		StartTileMap(matrix);
 	}
 
 	public void SetPosition(Vector3 position)
@@ -69,7 +50,7 @@ public class TileMap : MonoBehaviour
 	//	gameObject.transform.SetParent(newParent.transform);
 	//}
 
-	public void StartTileMap(int[,] matrix)
+	public void StartTileMap(int[,] backgroundMatrix, int[,] roadMatrix)
 	{
 		//Spawn Background
 		for (int x = 0; x < width; x++)
@@ -82,7 +63,7 @@ public class TileMap : MonoBehaviour
 				TileController tc = t.GetComponent<TileController>();
 
 				backgroundTileControllers.Add(tc);
-				backgroundIndexedTiles[y, x] = tc;
+				backgroundIndexedTiles[x, y] = tc;
 
 				t.transform.localPosition = new Vector3(x, y, 0);
 
@@ -90,33 +71,64 @@ public class TileMap : MonoBehaviour
 
 				tc.tilemap = this;
 				tc.SetDefaultTIle();
-				tc.SetViewByIndex(matrix[y, x]);
-				tc.view.SetController(tc);
-				tc.view.SetGlow(tc.GetComponentInChildren<Glow>());
-				tc.view.spriteRenderer.sortingOrder = 0;
+				tc.SetViewByIndex(backgroundMatrix[x, y]);
+				tc.GetView.SetController(tc);
+				tc.GetView.SetGlow(tc.GetComponentInChildren<Glow>());
+				tc.GetView.spriteRenderer.sortingOrder = 0;
 				//tc.SetCharacterAnimationController(false);
 				//tc.SetCharBasicController(false);
 			}
 		}
 
 		//Spawn Roads
-		for (int i = 0; i < 10; i++)
+		for (int x = 0; x < width; x++)
 		{
-			//Getmatrix
-			//Spawn like background
+			for (int y = 0; y < height; y++)
+			{
+				var t = GameObject.Instantiate(tile, road, false);
+				t.name = x + "," + y;
+
+				TileController tc = t.GetComponent<TileController>();
+
+				roadTileControllers.Add(tc);
+				roadIndexedTiles[x, y] = tc;
+
+				t.transform.localPosition = new Vector3(x, y, 0);
+
+				tc.position = t.transform.localPosition;
+				tc.tilemap = this;
+				tc.SetDefaultTIle();
+				tc.SetViewByIndex(roadMatrix[x, y]);
+				tc.GetView.SetController(tc);
+				tc.GetView.SetGlow(tc.GetComponentInChildren<Glow>());
+				tc.GetDefinition.SetDefinition(TileModel.Kind.Walkable, false);
+				tc.GetView.spriteRenderer.sortingOrder = 1;
+				//tc.SetCharacterAnimationController(false);
+				//tc.SetCharBasicController(false);
+			}
 		}
 
-		//Spawn Characters
+
+		GenerateConnections(backgroundIndexedTiles);
+
+		ShowDroppable(false);
+
+		TESTSpawnCharacters();
+		TESTSetAStarForAllies();	
+	}
+
+	public void TESTSpawnCharacters()
+	{
 		int allyI = 22;
 		for (int i = 0; i < 10; i++)
 		{
 			var t = GameObject.Instantiate(tile, characters, false);
-			TileController tc = t.GetComponent<TileController>();		
+			TileController tc = t.GetComponent<TileController>();
 
-			if(i<5)
+			if (i < 5)
 				t.transform.localPosition = new Vector3(i, 0, 0);
 			else
-				t.transform.localPosition = new Vector3(i-5, allyI, 0);
+				t.transform.localPosition = new Vector3(i - 5, allyI, 0);
 
 			tc.position = t.transform.localPosition;
 
@@ -136,38 +148,27 @@ public class TileMap : MonoBehaviour
 			tc.GetDefinition.SetDefinition(TileModel.Kind.Walker, false);
 			tc.SetCharacterAnimationController(true);
 			tc.SetCharBasicController(false, false, true);
-			tc.view.spriteRenderer.sortingOrder = 1;
+			tc.GetView.spriteRenderer.sortingOrder = 2;
 		}
-		GenerateConnections(backgroundIndexedTiles);
+	}
 
-		ShowDroppable(false);
-
-		//AStar astar = new AStar();
-		//List<AStar.Node> lista = astar.Resolve(backgroundTileControllers[0], backgroundTileControllers[25], false);
-		//Debug.Log("FoundPath from: " + backgroundTileControllers[0] + " to: " + backgroundTileControllers[25]);
-		//for (int i = 0; i < lista.Count; i++)
-		//{
-		//	if (i == lista.Count - 1)
-		//		continue;
-		//	Debug.Log(lista[i].tile);
-		//}
-
+	public void TESTSetAStarForAllies()
+	{
 		for (int i = 0; i < 5; i++)
 		{
 			TileController tc = allyCharacterTileControllers[i];
 			TileController closestEnemy = GetClosestEnemy(tc);
 			AStar a = new AStar();
-			List<AStar.Node> path = a.Resolve(	backgroundIndexedTiles[(int)tc.position.y,
-												(int)tc.position.x], backgroundIndexedTiles[(int)closestEnemy.position.y, 
-												(int)closestEnemy.position.x], false);
-			if(path != null)
+			List<AStar.Node> path = a.Resolve(backgroundIndexedTiles[(int)tc.position.x,
+												(int)tc.position.y], backgroundIndexedTiles[(int)closestEnemy.position.x,
+												(int)closestEnemy.position.y], true);
+			if (path != null)
 			{
-				for (int k = path.Count-1; k > 0; k--)
+				for (int k = path.Count - 1; k > 0; k--)
 				{
 					if (k == path.Count - 1)
 						continue;
 					tc.charBasicController.AddCharPosition = path[k].tile.transform.localPosition;
-					//Debug.Log("Added to: " + tc + " position: " + path[k].tile.transform.localPosition);
 				}
 			}
 			else
@@ -197,33 +198,33 @@ public class TileMap : MonoBehaviour
 				if (leftConecction >= 0)
 				{
 					Connection c = new Connection();
-					c.tileA = matrix[h, w];
-					c.tileB = matrix[h, leftConecction];
-					matrix[h, w].connections.Add(c);
+					c.tileA = matrix[w, h];
+					c.tileB = matrix[leftConecction, h];
+					matrix[w, h].connections.Add(c);
 				}
 
 				if (rightConnection < width)
 				{
 					Connection c = new Connection();
-					c.tileA = matrix[h, w];
-					c.tileB = matrix[h, rightConnection];
-					matrix[h, w].connections.Add(c);
+					c.tileA = matrix[w,h];
+					c.tileB = matrix[rightConnection, h];
+					matrix[w, h].connections.Add(c);
 				}
 
 				if (bottomConnection >= 0)
 				{
 					Connection c = new Connection();
-					c.tileA = matrix[h, w];
-					c.tileB = matrix[bottomConnection, w];
-					matrix[h, w].connections.Add(c);
+					c.tileA = matrix[w, h];
+					c.tileB = matrix[w, bottomConnection];
+					matrix[w, h].connections.Add(c);
 				}
 
 				if (topConnection < height)
 				{
 					Connection c = new Connection();
-					c.tileA = matrix[h, w];
-					c.tileB = matrix[topConnection, w];
-					matrix[h, w].connections.Add(c);
+					c.tileA = matrix[w, h];
+					c.tileB = matrix[w, topConnection];
+					matrix[w, h].connections.Add(c);
 				}
 			}
 		}
